@@ -42,3 +42,11 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    archiveFileName = "gateway.jar"
+}
+
+bootJar {
+    archiveFileName = 'gateway.jar'
+}
