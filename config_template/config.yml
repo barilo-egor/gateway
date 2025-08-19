@@ -1,0 +1,13 @@
+jwt:
+  secret:
+server:
+  port:
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id:
+              uri:
+              predicates:
