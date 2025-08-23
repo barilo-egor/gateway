@@ -41,7 +41,7 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
             }
 
         } catch (JwtException e) {
-            return Mono.empty(); // токен невалиден
+            return Mono.empty();
         }
         return Mono.empty();
     }
