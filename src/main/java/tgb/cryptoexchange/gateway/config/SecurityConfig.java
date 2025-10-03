@@ -22,6 +22,7 @@ public class SecurityConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/auth/login").permitAll()
                         .anyExchange().authenticated()
                 )
                 .authenticationManager(jwtAuthManager)
