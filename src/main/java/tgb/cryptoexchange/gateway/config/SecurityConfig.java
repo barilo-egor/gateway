@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/auth/login").permitAll()
+                        .pathMatchers("/merchant-details/callback/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .authenticationManager(jwtAuthManager)
