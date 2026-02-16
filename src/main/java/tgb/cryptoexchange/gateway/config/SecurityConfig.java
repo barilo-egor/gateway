@@ -9,12 +9,16 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
 
     private final JwtAuthenticationManager jwtAuthManager;
+
     private final JwtSecurityContextRepository contextRepository;
 
+    private final AppSecurityProperties appSecurityProperties;
+
     public SecurityConfig(JwtAuthenticationManager jwtAuthManager,
-                                 JwtSecurityContextRepository contextRepository) {
+                          JwtSecurityContextRepository contextRepository, AppSecurityProperties appSecurityProperties) {
         this.jwtAuthManager = jwtAuthManager;
         this.contextRepository = contextRepository;
+        this.appSecurityProperties = appSecurityProperties;
     }
 
     @Bean
@@ -23,7 +27,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/auth/login").permitAll()
-                        .pathMatchers("/merchant-details/callback/**").permitAll()
+                        .pathMatchers(appSecurityProperties.getIgnoreUrls().toArray(String[]::new)).permitAll()
                         .anyExchange().authenticated()
                 )
                 .authenticationManager(jwtAuthManager)
