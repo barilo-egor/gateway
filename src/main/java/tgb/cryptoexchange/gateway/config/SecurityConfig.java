@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
+
 @Configuration
 public class SecurityConfig {
 
@@ -25,11 +27,15 @@ public class SecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/login").permitAll()
-                        .pathMatchers(appSecurityProperties.getIgnoreUrls().toArray(String[]::new)).permitAll()
-                        .anyExchange().authenticated()
-                )
+                .authorizeExchange(exchange -> {
+                    ServerHttpSecurity.AuthorizeExchangeSpec authorizeExchangeSpec = exchange
+                            .pathMatchers("/auth/login").permitAll();
+                    if (!appSecurityProperties.getIgnoreUrls().isEmpty()) {
+                        authorizeExchangeSpec
+                                .pathMatchers(appSecurityProperties.getIgnoreUrls().toArray(String[]::new)).permitAll();
+                    }
+                    authorizeExchangeSpec.anyExchange().authenticated();
+                })
                 .authenticationManager(jwtAuthManager)
                 .securityContextRepository(contextRepository)
                 .build();
