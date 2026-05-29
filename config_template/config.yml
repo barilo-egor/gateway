@@ -1,5 +1,3 @@
-jwt:
-  secret:
 server:
   port:
 spring:
